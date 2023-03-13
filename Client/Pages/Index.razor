@@ -1,0 +1,38 @@
+﻿@page "/"
+@using Blazorise.Shared
+@inject HttpClient Http
+
+<PageTitle>Index</PageTitle>
+<b>Custom Paging Grid Demo</b>
+@if (employeeList == null)
+{
+    <p>It is loading</p>
+}
+else
+{
+    <DataGrid 
+          TItem="Emp"
+          Data="@employeeList"
+
+          @bind-SelectedRow="@selectedEmployee"
+
+            Responsive>
+    <DataGridCommandColumn />
+    <DataGridColumn Field="@nameof(Emp.id)" Caption="#" Sortable="false" />
+    <DataGridColumn Field="@nameof(Emp.firstName)" Caption="First Name" Editable />
+        <DataGridColumn Field="@nameof(Emp.lastName)" Caption="Last Name" Editable />
+        <DataGridColumn Field="@nameof(Emp.email)" Caption="Email" Editable />
+        <DataGridColumn Field="@nameof(Emp.salary)" Caption="Salary" DisplayFormat="{0:C}" Editable>
+    </DataGridColumn>
+</DataGrid>
+}
+
+@code {
+    private List<Emp> employeeList;
+    private Emp selectedEmployee;
+
+    protected override async Task OnInitializedAsync()
+    {
+        employeeList = await Http.GetFromJsonAsync<List<Emp>>("https://hub.dummyapis.com/employee?noofRecords=10&idStarts=1001");
+    }
+}

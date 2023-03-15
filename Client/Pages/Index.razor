@@ -15,8 +15,8 @@ else
           ReadData="@OnReadData"
           TotalItems="@totalEmployees"
           PageSize="4"
-            ShowPager
-            Responsive>
+          ShowPager
+         Responsive>
     <DataGridCommandColumn />
     <DataGridColumn Field="@nameof(Emp.id)" Caption="#" Sortable="false" />
     <DataGridColumn Field="@nameof(Emp.firstName)" Caption="First Name" Editable />
@@ -40,7 +40,7 @@ else
     {
         int pagenum = e.Page;
         int pagesize = e.PageSize;
-        //API should be like this
+        //Web API URL should be like this
         //var response = await Http.GetJsonAsync<Employee[]>( $"some-api/employees?page={e.Page}&pageSize={e.PageSize}" );
         employeeList = await Http.GetFromJsonAsync<List<Emp>>("https://hub.dummyapis.com/employee?noofRecords=10&idStarts=1001");
 

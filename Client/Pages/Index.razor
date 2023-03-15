@@ -10,12 +10,12 @@
 }
 else
 {
-    <DataGrid 
-          TItem="Emp"
+    <DataGrid TItem="Emp"
           Data="@employeeList"
-
-          @bind-SelectedRow="@selectedEmployee"
-
+          ReadData="@OnReadData"
+          TotalItems="@totalEmployees"
+          PageSize="4"
+            ShowPager
             Responsive>
     <DataGridCommandColumn />
     <DataGridColumn Field="@nameof(Emp.id)" Caption="#" Sortable="false" />
@@ -30,9 +30,21 @@ else
 @code {
     private List<Emp> employeeList;
     private Emp selectedEmployee;
+    private int totalEmployees = 5;
 
     protected override async Task OnInitializedAsync()
     {
         employeeList = await Http.GetFromJsonAsync<List<Emp>>("https://hub.dummyapis.com/employee?noofRecords=10&idStarts=1001");
+    }
+    private async Task OnReadData(DataGridReadDataEventArgs<Emp> e)
+    {
+        int pagenum = e.Page;
+        int pagesize = e.PageSize;
+        //API should be like this
+        //var response = await Http.GetJsonAsync<Employee[]>( $"some-api/employees?page={e.Page}&pageSize={e.PageSize}" );
+        employeeList = await Http.GetFromJsonAsync<List<Emp>>("https://hub.dummyapis.com/employee?noofRecords=10&idStarts=1001");
+
+        //For More Details about this code snippet, Please refer this post
+        //https://blazorise.com/docs/extensions/datagrid/binding-data/large-data
     }
 }
